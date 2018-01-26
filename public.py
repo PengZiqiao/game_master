@@ -1,16 +1,16 @@
+import os
+import random
 import subprocess
+import requests
 from io import BytesIO
 from pathlib import Path
 
-import requests
 from PIL import Image
 from aip import AipOcr
-from selenium import webdriver
 
 import config
 
 ocr_client = AipOcr(config.APP_ID, config.API_KEY, config.SECRET_KEY)
-chrome = webdriver.Chrome()
 
 
 def screenshot():
@@ -18,7 +18,7 @@ def screenshot():
     binary_screenshot = process.stdout.read().replace(b'\r\n', b'\n')
 
     # 写入文件
-    Path('test.png').write_bytes(binary_screenshot)
+    # Path('test.png').write_bytes(binary_screenshot)
 
     # 写入内存
     fb = BytesIO()
@@ -53,6 +53,11 @@ def ocr(img, join=True):
 
 
 def baidu_search(keyword):
-    url = f'https://www.baidu.com/s?wd={keyword}'
-    chrome.get(url)
-    return chrome.page_source
+    url = f'http://www.baidu.com/s?wd={keyword}'
+    res = requests.get(url, params={'wd': keyword}).text
+    return res
+
+
+def click(x, y):
+    cmd = f'adb shell input swipe {x} {y} {x+random.randint(0,3)} {y+random.randint(0,1)}'
+    os.system(cmd)

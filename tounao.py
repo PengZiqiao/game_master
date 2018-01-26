@@ -1,17 +1,15 @@
 import public
-import random
-import os
 
 # 答案坐标
 ANSWER_POINTS = [
-    (316, 993),
-    (316, 1174),
-    (316, 1366),
-    (316, 1570),
+    (530, 900),
+    (520, 1080),
+    (540, 1290),
+    (550, 1480),
 ]
 
 # 自动答题
-AUTO_CLICK = False
+AUTO_CLICK = True
 
 
 def run():
@@ -28,15 +26,10 @@ def run():
         res = public.baidu_search(question)
         answer_index = best_answer(answers, res)
         if AUTO_CLICK:
-            click(*ANSWER_POINTS[answer_index])
+            public.click(*ANSWER_POINTS[answer_index])
 
     else:
         print('[*] 少年这题靠你自己了！')
-
-
-def click(x, y):
-    cmd = f'adb shell input swipe {x} {y} {x+random.randint(0,3)} {x+random.randint(0,1)}'
-    os.system(cmd)
 
 
 def best_answer(answers, res):
